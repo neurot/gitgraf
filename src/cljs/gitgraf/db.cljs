@@ -1,4 +1,8 @@
 (ns gitgraf.db)
 
 (def default-db
-  {:name "re-frame"})
+  {:name "gitgraf"
+   :user {:profile {}
+          :repos []}
+   :loading? false
+   :error false})

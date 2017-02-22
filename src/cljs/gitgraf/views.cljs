@@ -1,38 +1,161 @@
 (ns gitgraf.views
-    (:require [re-frame.core :as re-frame]))
+  (:require [re-frame.core :as re-frame]
+            [reagent.core :as reagent]))
 
+(defn loading-throbber
+  []
+  (let [loading? (re-frame/subscribe [:loading?])]
+    [:div
+     (if @loading?
+       "..."
+       "-")]))
 
-;; home
-
-(defn home-panel []
-  (let [name (re-frame/subscribe [:name])]
+(defn github-id-input
+  []
+  (let [loading? (re-frame/subscribe [:loading?])
+        error? (re-frame/subscribe [:error?])
+        github-id (reagent/atom "")
+        on-click (fn [_]
+                   (when-not (empty? @github-id)
+                     (re-frame/dispatch [:set-github-id @github-id])
+                     (reset! github-id "")))]
     (fn []
       [:div
-       [:div.m1 [:a.btn.btn-primary {:href "#/about"} "go to About Page"]]
-       [:div (str "Hi from " @name ". This is the Home Page.")]])))
+       [:div
+        [:input {:type "text"
+                              :placeholder "Enter Github ID"
+                              :on-change #(reset! github-id (-> % .-target .-value))}]
+        [:span
+         [:button.btn {:type "button"
+                                   :on-click #(when-not @loading? (on-click %))}
+          "Go"]
+         ]]
+       (when @error?
+         [:p "¯\\_(ツ)_/¯  Bad github handle or rate limited!"])])))
 
-
-;; about
-
-(defn about-panel []
+(defn user-name-and-avatar
+  []
   (fn []
-    [:div
-     [:div.m1 [:a.btn.btn-primary {:href "#/"} "go to Home Page"]]
-     [:div "This is the About Page."]]))
+    (let [user-profile (re-frame/subscribe [:user-profile])]
+      [:div
+       [:img {:src (get @user-profile "avatar_url")}]
+       [:h5 (get @user-profile "name")]])))
+
+(defn user-repos-list
+  []
+  (let [user-repos (re-frame/subscribe [:user-repos])]
+    (fn []
+      [:div
+       [:ul (map-indexed (fn [i repo]
+                                      (vector :li {:key i}
+                                              [:h4 (get repo "name")]
+                                              [:p (get repo "description")]))
+                                    @user-repos)]])))
+;; home
+(defn home-panel []
+  (let []
+    (fn []
+      [:div])))
+
+
+;; profile
+
+(defn profile-panel []
+  (fn []
+    [:div "This is the Profile Page."
+     [:div [:a {:href "#/"} "go to Home Page"]]
+     ]))
 
 
 ;; main
 
-(defn- panels [panel-name]
-  (case panel-name
-    :home-panel [home-panel]
-    :about-panel [about-panel]
-    [:div]))
-
-(defn show-panel [panel-name]
-  [panels panel-name])
+(defmulti panels identity)
+(defmethod panels :home-panel [] [home-panel])
+(defmethod panels :profile-panel [] [profile-panel])
+(defmethod panels :default [] [:div])
 
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])]
     (fn []
-      [show-panel @active-panel])))
+      [:div
+       [loading-throbber]
+       [github-id-input]
+       [user-name-and-avatar]
+       [user-repos-list]
+       ;; (panels @active-panel)
+       ])))
+
+
+
+
+
+
+
+
+
+
+
+;; (defn user-name-and-avatar
+;;   []
+;;   (fn []
+;;     (let [user-profile (re-frame/subscribe [:user-profile])]
+;;       [:div
+;;        [:img {:src (get @user-profile "avatar-url")}]
+;;        [:h5 (get @user-profile "name")]])))
+
+;; (defn github-id-input []
+;;   (let [github-id (reagent/atom "")
+;;         on-click (fn [_]
+;;                    (when-not (empty? @github-id)
+;;                      (re-frame/dispatch [:set-github-id @github-id])
+;;                      (reset! github-id "")))]
+;;     (fn []
+;;       [:div
+;;        [:input {:type "text"
+;;                 :placeholder "Enter GitHub ID"
+;;                 :on-change #(reset! github-id (-> % .-target .-value))}]
+;;        [:button.btn.btn-primary {:type "button"
+;;                                  :on-click #(on-click %)}
+;;         "Search"]
+;;        ])))
+
+;; ;; home
+
+;; (defn home-panel []
+;;   (let [name (re-frame/subscribe [:name])
+;;         profile-picture (re-frame/subscribe [:profile-picture])]
+;;     (fn []
+;;       [:div
+;;        [:h4 (str "Hi from " @name ".")]
+;;        [github-id-input]
+;;        [:div.m1 [:a.btn.btn-primary {:href "#/about"} "goto About Page"]]
+;;        [user-name-and-avatar]
+;;        ])))
+
+
+;; ;; about
+
+;; (defn about-panel []
+;;   (fn []
+;;     [:div
+;;      [:h2 "About GitGraf"]
+;;      [:h4 "This is the About Page."]
+;;      [:p "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."]
+;;      [:div.m1 [:a.btn.btn-primary {:href "#/"} "goto Home Page"]]]))
+
+
+;; ;; main
+
+;; (defn- panels [panel-name]
+;;   (case panel-name
+;;     :home-panel [home-panel]
+;;     :about-panel [about-panel]
+;;     [:div]))
+
+;; (defn show-panel [panel-name]
+;;   [panels panel-name])
+
+;; (defn main-panel []
+;;   (let [active-panel (re-frame/subscribe [:active-panel])]
+;;     (fn []
+;;       [show-panel @active-panel])))

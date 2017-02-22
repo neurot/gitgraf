@@ -7,9 +7,12 @@
                  [secretary "1.2.3"]
                  [compojure "1.5.0"]
                  [yogthos/config "0.8"]
-                 [ring "1.4.0"]]
+                 [ring "1.4.0"]
+                 [io.aviso/pretty "0.1.33"]
+                 [cljs-ajax "0.5.8"]]
 
-  :plugins [[lein-cljsbuild "1.1.4"]]
+  :plugins [[lein-cljsbuild "1.1.4"]
+            [io.aviso/pretty "0.1.33"]]
 
   :min-lein-version "2.5.3"
 

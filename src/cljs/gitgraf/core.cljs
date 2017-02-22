@@ -16,7 +16,7 @@
     (println "dev mode")))
 
 (defn mount-root []
-  (re-frame/clear-subscription-cache!)
+  ;; (re-frame/clear-subscription-cache!)
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 

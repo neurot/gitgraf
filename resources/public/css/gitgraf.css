@@ -1,0 +1,32 @@
+body {
+    margin: 5px;
+    font-family: 'Source Serif Pro', serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+div {
+    border-style: solid;
+    border-width: 2px;
+    margin: 1px;
+    border-color: #C0C0C0;
+}
+
+.main {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    margin-top: 5vh;
+    width: 250px;
+}
+
+h1, h2, h3,
+h4, h5, h6 {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.btn {
+    font-family: 'Source Sans Pro', sans-serif;
+}

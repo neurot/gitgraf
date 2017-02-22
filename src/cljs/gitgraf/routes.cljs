@@ -21,6 +21,9 @@
   (defroute "/" []
     (re-frame/dispatch [:set-active-panel :home-panel]))
 
+  (defroute "/profile" []
+    (re-frame/dispatch [:set-active-panel :profile-panel]))
+
   (defroute "/about" []
     (re-frame/dispatch [:set-active-panel :about-panel]))
 
