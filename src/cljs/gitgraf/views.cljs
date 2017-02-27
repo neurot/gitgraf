@@ -22,14 +22,13 @@
     (fn []
       [:div
        [:div
-        [:input {:type "text"
-                              :placeholder "Enter Github ID"
-                              :on-change #(reset! github-id (-> % .-target .-value))}]
-        [:span
-         [:button.btn {:type "button"
-                                   :on-click #(when-not @loading? (on-click %))}
-          "Go"]
-         ]]
+        [:input.search-box.border.p1 {:type "text"
+                                      :placeholder "Enter Github ID"
+                                      :on-change #(reset! github-id (-> % .-target .-value))}]
+        [:button.btn {:type "button"
+                      :on-click #(when-not @loading? (on-click %))}
+         "Go"]]
+
        (when @error?
          [:p "¯\\_(ツ)_/¯  Bad github handle or rate limited!"])])))
 
@@ -38,19 +37,28 @@
   (fn []
     (let [user-profile (re-frame/subscribe [:user-profile])]
       [:div
-       [:img {:src (get @user-profile "avatar_url")}]
-       [:h5 (get @user-profile "name")]])))
+       [:img.avatar {:src (get @user-profile "avatar_url")}]
+       [:div.m1
+        [:h1 (get @user-profile "name")]]])))
 
 (defn user-repos-list
   []
   (let [user-repos (re-frame/subscribe [:user-repos])]
     (fn []
       [:div
-       [:ul (map-indexed (fn [i repo]
-                                      (vector :li {:key i}
-                                              [:h4 (get repo "name")]
-                                              [:p (get repo "description")]))
-                                    @user-repos)]])))
+       [:div.m1
+        [:h3 "Hausdacher eigentlich gearbeitet"]
+        [:p.ml1 "Stockwerke feierabend eigentlich geh federdecke aufzulosen gru sah hof. Tod macht see las namen neues. Gegenteil mitwisser ins uhr schwemmen. Tur ubel nein also ture sohn ihr. Stille erregt ku hubsch es morgen kummer andrer ja pa. Litze nadel zu ihrem blode in zu werde. Bildnis ten diesmal ehe hinuber drunten gut tal. "]]
+       ;; [:ul (map-indexed (fn [i repo]
+       ;;                     (vector :li.list-reset {:key i}
+       ;;                             [:h3 (get repo "name")]
+       ;;                             [:p (get repo "description")]))
+       ;;                   @user-repos)]
+       (map-indexed (fn [i repo]
+                            (vector :div.ml1 {:key i}
+                                    [:h3 (get repo "name")]
+                                    [:p.ml1 (get repo "description")]))
+                          @user-repos)])))
 ;; home
 (defn home-panel []
   (let []
@@ -63,8 +71,8 @@
 (defn profile-panel []
   (fn []
     [:div "This is the Profile Page."
-     [:div [:a {:href "#/"} "go to Home Page"]]
-     ]))
+     [:div [:a {:href "#/"} "go to Home Page"]]]))
+
 
 
 ;; main
@@ -81,9 +89,9 @@
        [loading-throbber]
        [github-id-input]
        [user-name-and-avatar]
-       [user-repos-list]
+       [user-repos-list]])))
        ;; (panels @active-panel)
-       ])))
+
 
 
 
