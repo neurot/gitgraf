@@ -1,32 +1,43 @@
 body {
-    margin: 5px;
     font-family: 'Source Serif Pro', serif;
+    font-size: 14px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 div {
-    border-style: solid;
-    border-width: 2px;
-    margin: 1px;
-    border-color: #C0C0C0;
+    /* border-style: solid; */
+    /* border-width: 2px; */
+    /* margin: 1px; */
+    /* border-color: #C0C0C0; */
 }
 
 .main {
-    position: absolute;
+    max-width: 1000px;
     left: 0;
     right: 0;
-    margin: auto;
-    text-align: center;
-    margin-top: 5vh;
-    width: 250px;
+    margin: 3px;
+    /* margin-right: auto; */
+    /* margin-left: auto; */
 }
 
 h1, h2, h3,
 h4, h5, h6 {
     font-family: 'Source Sans Pro', sans-serif;
+    font-variant:small-caps;
+    text-transform: uppercase;
 }
 
 .btn {
     font-family: 'Source Sans Pro', sans-serif;
+}
+
+.search-box {
+    font-size: 32px;
+    text-transform: lowercase;
+    width: 100%;
+}
+
+.avatar {
+    width: 100%;
 }
